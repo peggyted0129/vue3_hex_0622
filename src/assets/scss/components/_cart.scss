@@ -12,6 +12,25 @@
 .cart-foot-underline {
   border-bottom: none;
 }
+
+/* Cart.vue */
+.cart {
+  padding-top: 66px;
+}
+.cart-banner {
+  @include banner('~@/assets/img/cart_banner.jpg', 300px);
+  position: relative;
+  &::before {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.4);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+  }
+}
 .order {
   border: 1px solid #b2b2b2;
   border-radius: 3px;
