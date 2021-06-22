@@ -33,11 +33,11 @@
             <div class="d-flex flex-column justify-content-end">
               <!-- +、- 按鍵 -->
               <div class="input-group justify-content-start align-items-center mb-2" style="width:150px">
-                <button type="button" class="input-group-text btn btn-theme" @click="cartBtn('minus')" :disabled="num === 1">
+                <button type="button" class="input-group-text btn btn-theme" @click="productCartBtn('minus')" :disabled="num === 1">
                   <i class="fas fa-minus"></i>
                 </button>
                 <input type="number" v-model.number="num" class="form-control text-center ps-5 m-0 cartNum" readonly>
-                <button type="button" class="input-group-text btn btn-theme" @click="cartBtn('add')" :disabled="num === 10">
+                <button type="button" class="input-group-text btn btn-theme" @click="productCartBtn('add')" :disabled="num === 10">
                   <i class="fas fa-plus"></i>
                 </button>
               </div>
@@ -116,12 +116,14 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import MixUser from '@/components/MixUser.vue'
+
 export default {
+  mixins: [MixUser],
   data () {
     return {
-      carData: JSON.parse(sessionStorage.getItem('carData')) || [],
       productId: '',
-      num: 1
+      num: 1 // 加入購物車的按鈕 add、minus 按鈕綁定
     }
   },
   computed: {
@@ -129,66 +131,7 @@ export default {
     ...mapGetters('productModules', ['products', 'product'])
   },
   methods: {
-    ...mapActions('productModules', ['getProducts', 'getProduct']),
-    addlocalCarts (product, num) { // num 已經在初始值設定為 1， 所以參數不用再設定初始值
-      const vm = this
-      const cacheCarID = []
-      vm.carData.forEach((item) => {
-        cacheCarID.push(item.product_id)
-      })
-      vm.toastTopEnd(`${product.title} 加入購物車`, 'success')
-      if (cacheCarID.indexOf(product.id) === -1) {
-        const cartContent = {
-          product_id: product.id,
-          qty: num,
-          title: product.title,
-          imageUrl: product.imageUrl,
-          unit: product.unit,
-          origin_price: product.origin_price,
-          price: product.price,
-          category: product.category
-        }
-        vm.carData.push(cartContent)
-        sessionStorage.setItem('carData', JSON.stringify(vm.carData))
-      } else {
-        let cache = {}
-        vm.carData.forEach((item, key) => {
-          if (item.product_id === product.id) {
-            let { qty } = item
-            cache = {
-              product_id: product.id,
-              qty: qty += num,
-              title: product.title,
-              imageUrl: product.imageUrl,
-              unit: product.unit,
-              origin_price: product.origin_price,
-              price: product.price,
-              category: product.category
-            }
-            vm.carData.splice(key, 1)
-          }
-        })
-        vm.carData.push(cache)
-        sessionStorage.setItem('carData', JSON.stringify(vm.carData))
-      }
-    },
-    cartBtn (status) {
-      if (status === 'add') {
-        this.num += 1
-      } else if (status === 'minus') {
-        this.num -= 1
-      }
-    },
-    toastTopEnd (msg, icon) {
-      this.$swal({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        icon: icon,
-        title: msg
-      })
-    }
+    ...mapActions('productModules', ['getProducts', 'getProduct'])
   },
   created () {
     console.log(this.$route.params.id)

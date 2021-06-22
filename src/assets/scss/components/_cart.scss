@@ -53,6 +53,10 @@
     } 
   }
 }
+.orderDel:hover {
+  cursor: pointer;
+  color: $sgreen;
+}
 @include smobile {
   .order .orderImg {
     width: 80px;

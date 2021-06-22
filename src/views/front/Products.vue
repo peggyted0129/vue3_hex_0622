@@ -56,9 +56,11 @@
 </template>
 <script>
 import ProductsPagination from '@/components/front/ProductsPagination.vue'
+import MixUser from '@/components/MixUser.vue'
 import { mapGetters } from 'vuex'
 
 export default {
+  mixins: [MixUser],
   components: {
     ProductsPagination
   },
@@ -67,9 +69,6 @@ export default {
       products: [], // 產品列表
       categories: [],
       searchText: '',
-      loadingStatus: { // 讀取效果
-        loadingItem: ''
-      },
       pages: {
         dataLen: 0, // 全部資料長度
         pageTotal: 1, // 根據產品總筆數算出的總頁數
@@ -78,8 +77,7 @@ export default {
         hasPage: false,
         hasNext: true
       },
-      AllProducts: [],
-      carData: JSON.parse(sessionStorage.getItem('carData')) || []
+      AllProducts: []
     }
   },
   computed: {
@@ -96,48 +94,6 @@ export default {
     }
   },
   methods: {
-    addlocalCarts (product, qty = 1) {
-      const vm = this
-      const cacheCarID = []
-      vm.carData.forEach((item) => {
-        cacheCarID.push(item.product_id)
-      })
-      vm.toastTopEnd(`${product.title} 加入購物車`, 'success')
-      if (cacheCarID.indexOf(product.id) === -1) {
-        const cartContent = {
-          product_id: product.id,
-          qty: qty,
-          title: product.title,
-          imageUrl: product.imageUrl,
-          unit: product.unit,
-          origin_price: product.origin_price,
-          price: product.price,
-          category: product.category
-        }
-        vm.carData.push(cartContent)
-        sessionStorage.setItem('carData', JSON.stringify(vm.carData))
-      } else {
-        let cache = {}
-        vm.carData.forEach((item, key) => {
-          if (item.product_id === product.id) {
-            let { qty } = item
-            cache = {
-              product_id: product.id,
-              qty: qty += 1,
-              title: product.title,
-              imageUrl: product.imageUrl,
-              unit: product.unit,
-              origin_price: product.origin_price,
-              price: product.price,
-              category: product.category
-            }
-            vm.carData.splice(key, 1)
-          }
-        })
-        vm.carData.push(cache)
-        sessionStorage.setItem('carData', JSON.stringify(vm.carData))
-      }
-    },
     searchTitle (txt, num) {
       this.searchText = txt
       const title = document.querySelectorAll('.products-title')
@@ -205,30 +161,6 @@ export default {
         this.pages.hasNext = false
       }
       this.getProducts()
-    },
-    addCart (id, qty = 1) { // === 預計刪除
-      const vm = this
-      vm.loadingStatus.loadingItem = id
-      const cart = {
-        product_id: id,
-        qty
-      }
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`
-      vm.$http.post(api, { data: cart }).then((res) => {
-        console.log('加入購物車', res.data, cart)
-        vm.loadingStatus.loadingItem = ''
-        vm.toastTopEnd(res.data.message, 'success')
-      })
-    },
-    toastTopEnd (msg, icon) {
-      this.$swal({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        icon: icon,
-        title: msg
-      })
     }
   },
   created () {
