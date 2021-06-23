@@ -69,3 +69,36 @@
     height: 90px;
   }
 }
+/* Cart.vue - empty */
+.empty {
+  padding: 80px 0 80px;
+  margin: 1rem 0 2rem;
+  text-align: center;
+  font-size: 1.5rem;
+  border: 2px solid #c9d9cc;
+  position: relative;
+  &:before {
+    content: "";
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    display: block;
+    border: 2px solid #c9d9cc;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: -1;
+  }
+}
+/* Cart.vue - footer 按鈕 */
+.cart-footer-btn {
+  border-radius: 60px;
+  font-size: 15px;
+  padding: 0 30px;
+  letter-spacing: 2px;
+  width: 180px;
+  height: 54px;
+  line-height: 54px;
+  & i {
+    font-size: 17px;
+  }
+}

@@ -15,7 +15,7 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <router-link to="/products" class="nav-link" @click="navScrollUp">產品總覽</router-link>
+            <router-link to="/products" class="nav-link" @click="navScrollUp">逛逛商店</router-link>
           </li>
           <!-- <li class="nav-item ms-2 py-4">
             <a class="nav-link" href="#" @click="navScrollUp">購物車</a>

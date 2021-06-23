@@ -1,5 +1,5 @@
 <template>
-<section class="products">
+<section class="products mb-17">
   <loading v-model:active="isLoading">
     <img src="https://upload.cc/i1/2021/06/12/N7mIQ1.gif
 " alt="loading">
@@ -48,7 +48,7 @@
       </div>
     </div>
     <!-- pagination -->
-    <div class="d-flex mt-5 justify-content-center">
+    <div class="d-flex mt-5 justify-content-center" v-if="searchText === ''">
       <ProductsPagination :pages="pages" @get-current-page="getCurrentPage"></ProductsPagination>
     </div>
   </div>

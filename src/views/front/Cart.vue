@@ -6,14 +6,21 @@
   </loading> -->
   <!-- banner -->
   <div class="w-100 cart-banner mb-12"></div>
-  <div class="container mb-13">
+  <div class="container mb-15">
     <div class="d-flex align-items-center justify-content-between mb-4">
       <h3 class="text-theme fw-bolder">購買清單</h3>
-      <button @click="delAllCarts" class="btn btn-outline-danger" type="button">清空購物車</button>
+      <button @click="delAllCarts" class="btn btn-outline-danger" type="button" v-if="carData.length > 0">清空購物車</button>
     </div>
+    <!-- 購物車 table -->
     <div class="row">
       <div class="col-12">
-        <ul class="order py-4 px-0 p-sm-4">
+        <div v-if="carData.length == 0" class="empty fw-bolder d-flex align-items-center justify-content-center">
+          <div>
+             <p>您的購物車現在沒有商品喔，快去購物吧!!</p>
+             <router-link to="/products" class="btn btn-theme btn-lg text-white mt-9 fw-bolder hvr-bounce-to-right">逛逛商店</router-link>
+          </div>
+        </div>
+        <ul v-if="carData.length > 0" class="order py-4 px-0 p-sm-4">
           <li class="orderList" v-for="item in carData" :key="item.product_id">
             <div class="row flex-wrap">
               <div class="col-3 col-md-2 px-0 px-md-0">
@@ -57,14 +64,23 @@
           </li>
           <li class="orderList border-0 mb-0">
             <div class="row">
-              <div class="col-6 text-end"> 共 {{ carData.length }} 項</div>
-              <div class="col-3 text-end fw-bolder text-sgreen">總計</div>
-              <div class="col-2 text-end fw-bolder text-sgreen p-0">{{ summary(item) }}</div>
+              <div class="col-4 col-sm-6 text-end"> 共 {{ carData.length }} 項</div>
+              <div class="col-3 col-sm-3 text-end fw-bolder text-sgreen">總計</div>
+              <div class="col-4 col-sm-2 text-end fw-bolder text-sgreen p-0">NT$ {{ totalPrice }}</div>
               <div class="col-1 p-0"></div>
             </div>
           </li>
         </ul>
       </div>
+    </div>
+    <!-- 購物車 footer -->
+    <div v-if="carData.length > 0" class="d-flex justify-content-between mt-8">
+      <router-link to="/products" class="cart-footer-btn btn btn-theme text-white hvr-float">
+        <i class="fa fa-undo me-3"></i>繼續購物
+      </router-link>
+      <router-link to="/products" class="cart-footer-btn btn btn-sgreen text-white hvr-float">
+        前往結帳<i class="fas fa-angle-double-right ms-3"></i>
+      </router-link>
     </div>
   </div>
 </section>
@@ -77,6 +93,18 @@ export default {
   mixins: [MixUser],
   data () {
     return {
+    }
+  },
+  computed: {
+    totalPrice () {
+      const vm = this
+      const price = []
+      vm.carData.forEach((item) => {
+        price.push(parseInt(item.price * item.qty))
+      })
+      return price.reduce(function (total, e) {
+        return total + e
+      })
     }
   },
   methods: {
