@@ -24,9 +24,9 @@
           <li class="orderList" v-for="item in carData" :key="item.product_id">
             <div class="row flex-wrap">
               <div class="col-3 col-md-2 px-0 px-md-0">
-                <div class="orderImg">
+                <router-link :to="{ name: 'ProductDetail', params: { id: item.product_id }}" class="orderImg">
                   <img :src="item.imageUrl" alt="cart-item">
-                </div>
+                </router-link>
               </div>
               <div class="col-8 col-md-9 px-0">
                 <div class="row mx-3 w-100">
