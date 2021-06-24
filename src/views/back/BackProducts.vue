@@ -11,6 +11,7 @@
       <table class="table table-hover">
         <thead>
           <tr>
+            <th scope="col" width="100">序號</th>
             <th scope="col" width="150">分類</th>
             <th scope="col">產品名稱</th>
             <th scope="col" width="100">原價</th>
@@ -21,6 +22,7 @@
         </thead>
         <tbody>
           <tr v-for="(item) in products" :key="item.id">
+            <td>{{ item.num }}</td>
             <td>{{ item.category }}</td>
             <td>{{ item.title }}</td>
             <td class="text-end">{{ item.origin_price }}</td>
